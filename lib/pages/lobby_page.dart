@@ -29,18 +29,18 @@ class _LobbyPageState extends State<LobbyPage> {
 
   RtcEngine _engine;
   RtcChannel _channel;
-  RtcChannel _channel2;
 
   @override
   void dispose() {
     // clear users
     _users.clear();
+    _users2.clear();
     // destroy sdk
     _engine.leaveChannel();
     _engine.destroy();
     _channel.unpublish();
-    _channel.destroy();
     _channel.leaveChannel();
+    _channel.destroy();
     super.dispose();
   }
 
@@ -59,7 +59,6 @@ class _LobbyPageState extends State<LobbyPage> {
     await _engine.joinChannel(null, widget.rteChannelName, null, 0);
 
     _channel = await RtcChannel.create(widget.rtcChannelName);
-    // _channel2 = await RtcChannel.create(widget.rtcChannelName);
     _addRtcChannelEventHandlers();
     await _engine.setClientRole(ClientRole.Broadcaster);
     await _channel.joinChannel(null, null, 0, ChannelMediaOptions(true, true));
@@ -100,12 +99,6 @@ class _LobbyPageState extends State<LobbyPage> {
           final info = 'userOffline: $uid , reason: $reason';
           _infoStrings.add(info);
           _users.remove(uid);
-        });
-      },
-      firstRemoteVideoFrame: (uid, width, height, elapsed) {
-        setState(() {
-          final info = 'firstRemoteVideoFrame: $uid';
-          _infoStrings.add(info);
         });
       },
     ));
@@ -217,7 +210,7 @@ class _LobbyPageState extends State<LobbyPage> {
   /// Helper function to get list of native views
   List<Widget> _getRenderViews() {
     final List<StatefulWidget> list = [];
-    list.add(RtcLocalView.SurfaceView(renderMode: VideoRenderMode.Fit,));
+    list.add(RtcLocalView.SurfaceView());
     return list;
   }
 
@@ -312,38 +305,5 @@ class _LobbyPageState extends State<LobbyPage> {
         child: Container(),
       );
     }
-    // switch (views.length) {
-    //   case 1:
-    //     return Container(
-    //         child: Column(
-    //       children: <Widget>[_videoView(views[0])],
-    //     ));
-    //   case 2:
-    //     return Container(
-    //         child: Column(
-    //       children: <Widget>[
-    //         _expandedVideoRow([views[0]]),
-    //         _expandedVideoRow([views[1]])
-    //       ],
-    //     ));
-    //   case 3:
-    //     return Container(
-    //         child: Column(
-    //       children: <Widget>[
-    //         _expandedVideoRow(views.sublist(0, 2)),
-    //         _expandedVideoRow(views.sublist(2, 3))
-    //       ],
-    //     ));
-    //   case 4:
-    //     return Container(
-    //         child: Column(
-    //       children: <Widget>[
-    //         _expandedVideoRow(views.sublist(0, 2)),
-    //         _expandedVideoRow(views.sublist(2, 4))
-    //       ],
-    //     ));
-    //   default:
-    // }
-    // return Container();
   }
 }

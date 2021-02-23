@@ -26,7 +26,6 @@ class _LoginPageState extends State<LoginPage> {
           physics: BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            // mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.12,
